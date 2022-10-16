@@ -1,0 +1,12 @@
+{
+    "name": "packages/request_response_log",
+    "description": "log all incoming requests",
+    "authors": [
+        {
+            "name": "Fawad Saeed",
+            "email": "fawad@nextgeni.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}

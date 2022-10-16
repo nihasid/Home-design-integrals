@@ -1,0 +1,12 @@
+vendor
+Dockefile
+docker-compose.yml
+readme.md
+.git
+.idea
+.editorconfig
+.dockerignore
+storage/framework/cache/**
+storage/framework/sessions/**
+storage/framework/views/**
+bootstrap/cache/**

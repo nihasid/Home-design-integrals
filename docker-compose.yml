@@ -1,0 +1,78 @@
+version: '3'
+
+services:
+
+  #PHP Service
+  backend:
+    build: .
+    container_name: backend
+    restart: unless-stopped
+    tty: true
+    networks:
+      app-network:
+        ipv4_address: 172.28.1.3
+    depends_on:
+      - webserver
+      - db
+
+  #Nuxt Service
+  frontend:
+    build: ../grs-frontend
+    container_name: frontend
+    restart: unless-stopped
+    working_dir: /grs-frontend
+    ports:
+      - "3030:3030"
+    networks:
+      app-network:
+        ipv4_address: 172.28.1.4
+    depends_on:
+      - backend
+
+
+  #Nginx Service
+  webserver:
+    build: nginx
+    container_name: webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./public/:/var/www/grs-backend/public
+    networks:
+      app-network:
+        ipv4_address: 172.28.1.1
+
+  #MySQL Service
+  db:
+    build: mysql
+    container_name: db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: grs
+      MYSQL_ROOT_PASSWORD: grs123
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      app-network:
+        ipv4_address: 172.28.1.2
+
+#Docker Networks
+networks:
+  app-network:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
+
+#Volumes
+volumes:
+  dbdata:
+    driver: local
